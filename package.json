@@ -1,0 +1,63 @@
+{
+    "name": "@patternslib/dist",
+    "version": "9.0.0",
+    "title": "Markup patterns to drive behaviour.",
+    "description": "Patternslib is a JavaScript library that enables designers to build rich interactive prototypes without the need for writing any Javascript. All events are triggered by classes and other attributes in the HTML, without abusing the HTML as a programming language. Accessibility, SEO and well structured HTML are core values of Patterns.",
+    "license": "BSD-3-Clause",
+    "dependencies": {
+        "@patternslib/pat-content-mirror": "^3.0.0",
+        "@patternslib/pat-doclock": "^3.0.0",
+        "@patternslib/pat-shopping-cart": "^3.0.0",
+        "@patternslib/pat-sortable-table": "^3.0.0",
+        "@patternslib/pat-tiptap": "^4.3.0",
+        "@patternslib/pat-upload": "^3.0.0",
+        "@patternslib/patternslib": "^9.0.0"
+    },
+    "devDependencies": {
+        "@patternslib/dev": "^2.3.0",
+        "copy-webpack-plugin": "^11.0.0",
+        "webpack-modernizr-loader": "^5.0.0"
+    },
+    "resolutions": {},
+    "scripts": {
+        "build": "BUILD_ENV=patternslib NODE_ENV=production webpack --config webpack/webpack.config.js",
+        "build:stats": "BUILD_ENV=patternslib NODE_ENV=production webpack --config webpack/webpack.config.js --json > stats.json"
+    },
+    "engines": {
+        "node": ">=12.20.0"
+    },
+    "browserslist": [
+        ">0.2%",
+        "ie >= 11",
+        "not dead"
+    ],
+    "author": {
+        "name": "Patterns developers"
+    },
+    "homepage": "https://gitub.com/patternslib/dist",
+    "docs": "http://patternslib.com/",
+    "bugs": {
+        "url": "https://github.com/patternslib/dist/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/patternslib/dist.git"
+    },
+    "maintainers": [
+        {
+            "name": "Syslab.com GmbH",
+            "email": "info@syslab.com",
+            "url": "http://www.syslab.com"
+        },
+        {
+            "name": "Cornelis Kolbach",
+            "url": "http://cornae.com"
+        }
+    ],
+    "keywords": [
+        "patternslib"
+    ],
+    "publishConfig": {
+        "access": "public"
+    }
+}
