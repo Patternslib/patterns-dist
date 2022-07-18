@@ -1,9 +1,33 @@
- ##############
-## Please note
-##############
+-include .env
+export
 
-# First, run ``make install``.
-# After that you have through Makefile extension all the other base targets available.
+YARN   ?= npx yarn
+
+PACKAGE_NAME := $(shell node -p "require('./package.json').name")
+
+.PHONY: install
+stamp-yarn install:
+	$(YARN) install
+	# Install pre commit hook
+	$(YARN) husky install
+	touch stamp-yarn
+
+
+clean-dist:
+	rm -Rf dist/
+
+
+.PHONY: clean
+clean: clean-dist
+	rm -f stamp-yarn
+	rm -Rf node_modules/
+	rm -Rf release/
+
+
+.PHONY: bundle
+bundle: stamp-yarn
+	$(YARN) run build
+
 
 # If you want to release on GitHub, make sure to have a .env file with a GITHUB_TOKEN.
 # Also see:
@@ -11,47 +35,46 @@
 #	and https://github.com/release-it/release-it/blob/master/docs/github-releases.md#automated
 
 
-# Include base Makefile
--include node_modules/@patternslib/dev/Makefile
-
-# Define the GITHUB_TOKEN in the .env file for usage with release-it.
--include .env
-export
-
-PEGJS		?= npx pegjs
-SASS		?= npx sass
-YARN		?= npx yarn
-
-PACKAGE_NAME = "patternslib-dist"
-
-all:: bundle css
+release-zip: clean-dist bundle
+	$(eval BUNDLE_NAME := $(subst @patternslib/,,$(subst @plone/,,$(PACKAGE_NAME))))
+	$(eval PACKAGE_VERSION := $(shell node -p "require('./package.json').version"))
+	@echo Creating $(BUNDLE_NAME)-bundle-$(PACKAGE_VERSION).zip
+	mkdir -p release/$(BUNDLE_NAME)-bundle-$(PACKAGE_VERSION)
+	-cp -R dist/* release/$(BUNDLE_NAME)-bundle-$(PACKAGE_VERSION)
+	cd release/ && zip -r $(BUNDLE_NAME)-bundle-$(PACKAGE_VERSION).zip $(BUNDLE_NAME)-bundle-$(PACKAGE_VERSION)/
 
 
-.PHONY: install
-stamp-yarn install:
-	$(YARN) install
-	# Install pre commit hook
-	$(YARN) husky install
-	# We have checked in the .husky files, so no need to add the commitlint hook again.
-	# $(YARN) husky add .husky/commit-msg "npx yarn commitlint --edit $1"
-	touch stamp-yarn
+.PHONY: release-major
+release-major:
+	make release-zip && \
+		npx release-it major && \
+		npx release-it --github.release --github.update --github.assets=release/*.zip --no-github.draft --no-increment --no-git --no-npm && \
+		git checkout CHANGES.md
 
+.PHONY: release-minor
+release-minor:
+	make release-zip && \
+		npx release-it minor && \
+		npx release-it --github.release --github.update --github.assets=release/*.zip --no-github.draft --no-increment --no-git --no-npm && \
+		git checkout CHANGES.md
 
-.PHONY: watch
-watch: stamp-yarn
-	$(YARN) watch
+.PHONY: release-patch
+release-patch:
+	make release-zip && \
+		npx release-it patch && \
+		npx release-it --github.release --github.update --github.assets=release/*.zip --no-github.draft --no-increment --no-git --no-npm && \
+		git checkout CHANGES.md
 
+.PHONY: prerelease-alpha
+prerelease-alpha: clean install
+	make release-zip && \
+		npx release-it --preRelease=alpha && \
+		npx release-it --github.release --github.update --github.assets=release/*.zip --no-github.draft --no-increment --no-git --no-npm && \
+		git checkout CHANGES.md
 
-.PHONY: build
-build: bundle css
-
-
-.PHONY: depends-parser
-depends-parser:  stamp-yarn
-	$(PEGJS) -O size -f es src/lib/depends_parse.pegjs
-
-
-.PHONY: css
-css:
-	@$(SASS) -I style -I _sass -I . _sass/_patterns.scss style/patterns.css
-
+.PHONY: prerelease-beta
+prerelease-beta: clean install
+	make release-zip && \
+		npx release-it --preRelease=beta && \
+		npx release-it --github.release --github.update --github.assets=release/*.zip --no-github.draft --no-increment --no-git --no-npm && \
+		git checkout CHANGES.md

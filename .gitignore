@@ -6,5 +6,6 @@
 .DS_Store
 /stamp-yarn
 node_modules/
+release/
 stats.html
 stats.json

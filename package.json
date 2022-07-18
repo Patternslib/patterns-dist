@@ -1,8 +1,8 @@
 {
-    "name": "@patternslib/dist",
+    "name": "@patternslib/patterns-dist",
     "version": "9.0.0",
-    "title": "Markup patterns to drive behaviour.",
-    "description": "Patternslib is a JavaScript library that enables designers to build rich interactive prototypes without the need for writing any Javascript. All events are triggered by classes and other attributes in the HTML, without abusing the HTML as a programming language. Accessibility, SEO and well structured HTML are core values of Patterns.",
+    "title": "Patternslib distribution",
+    "description": "Bundle distribution of core Patternslib and addons.",
     "license": "BSD-3-Clause",
     "dependencies": {
         "@patternslib/pat-content-mirror": "^3.0.0",
@@ -20,8 +20,8 @@
     },
     "resolutions": {},
     "scripts": {
-        "build": "BUILD_ENV=patternslib NODE_ENV=production webpack --config webpack/webpack.config.js",
-        "build:stats": "BUILD_ENV=patternslib NODE_ENV=production webpack --config webpack/webpack.config.js --json > stats.json"
+        "build": "BUILD_ENV=patternslib NODE_ENV=production webpack --config webpack.config.js",
+        "build:stats": "BUILD_ENV=patternslib NODE_ENV=production webpack --config webpack.config.js --json > stats.json"
     },
     "engines": {
         "node": ">=12.20.0"
