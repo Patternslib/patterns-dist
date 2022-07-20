@@ -4,6 +4,8 @@ See the [history](./docs/history/index.md) for older changelog entries.
 
 
 
+## [9.0.1](https://github.com/patternslib/dist/compare/9.0.0...9.0.1) (2022-07-20)
+
 ## 9.0.0 (2022-07-18)
 
 
